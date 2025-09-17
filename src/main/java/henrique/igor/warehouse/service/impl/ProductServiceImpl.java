@@ -5,6 +5,7 @@ import henrique.igor.warehouse.dto.ProductStorefrontSavedDTO;
 import henrique.igor.warehouse.entity.ProductEntity;
 import henrique.igor.warehouse.mapper.IProductMapper;
 import henrique.igor.warehouse.repository.ProductRepository;
+import henrique.igor.warehouse.service.IProductQueryService;
 import henrique.igor.warehouse.service.IProductService;
 import henrique.igor.warehouse.service.IStockService;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class ProductServiceImpl implements IProductService {
 
     private final ProductRepository repository;
+    private final IProductQueryService  queryService;
     private final IStockService stockService;
     private final RestClient storefrontClient;
     private final IProductMapper mapper;
@@ -30,14 +32,10 @@ public class ProductServiceImpl implements IProductService {
         return entity;
     }
 
-    @Override
-    public ProductEntity findById(UUID id) {
-        return repository.findById(id).orElseThrow();
-    }
 
     @Override
     public void purchase(UUID id) {
-        var entity = findById(id);
+        var entity = queryService.findById(id);
         var stock = entity.decStock();
         repository.save(entity);
         if (stock.isUnavailable()){

@@ -5,7 +5,7 @@ import henrique.igor.warehouse.entity.StockEntity;
 import henrique.igor.warehouse.entity.StockStatus;
 import henrique.igor.warehouse.repository.StockRepository;
 import henrique.igor.warehouse.service.IProductChangeAvailabilityProducer;
-import henrique.igor.warehouse.service.IProductService;
+import henrique.igor.warehouse.service.IProductQueryService;
 import henrique.igor.warehouse.service.IStockService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,12 @@ import java.util.UUID;
 public class StockServiceImpl implements IStockService {
 
     private final StockRepository repository;
-    private final IProductService productService;
+    private final IProductQueryService productQueryService;
     private final IProductChangeAvailabilityProducer producer;
 
     @Override
     public StockEntity save(StockEntity entity) {
-        entity.setProduct(productService.findById(entity.getProduct().getId()));
+        entity.setProduct(productQueryService.findById(entity.getProduct().getId()));
         return repository.save(entity);
     }
 

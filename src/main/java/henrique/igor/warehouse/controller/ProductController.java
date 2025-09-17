@@ -4,6 +4,7 @@ import henrique.igor.warehouse.controller.request.ProductSaveRequest;
 import henrique.igor.warehouse.controller.response.ProductDetailResponse;
 import henrique.igor.warehouse.controller.response.ProductSavedResponse;
 import henrique.igor.warehouse.mapper.IProductMapper;
+import henrique.igor.warehouse.service.IProductQueryService;
 import henrique.igor.warehouse.service.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 public class ProductController {
 
     private final IProductService service;
+    private final IProductQueryService queryService;
     private final IProductMapper mapper;
 
     @PostMapping
@@ -43,7 +45,7 @@ public class ProductController {
 
     @GetMapping("{id}")
     ProductDetailResponse findById(@PathVariable final UUID id){
-        var dto = service.findById(id);
+        var dto = queryService.findById(id);
         return mapper.toDetailResponse(dto);
     }
 

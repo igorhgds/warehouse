@@ -12,7 +12,7 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 public interface IStockMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "product.id", source= "productId", ignore = true)
+    @Mapping(target = "product.id", source= "productId")
     @Mapping(target = "status", expression = "java(henrique.igor.warehouse.entity.StockStatus.IN_CONFERENCE)")
     StockEntity toEntity(final StockSaveRequest request);
 
