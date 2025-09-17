@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Objects;
@@ -32,12 +33,20 @@ public class ProductEntity {
     private Set<StockEntity> stocks =  new HashSet<>();
 
     public StockEntity decStock(){
-        var stock = this.stocks.stream()
+        var stock = getStockWithMinSoldPrice();
+        stock.decAmount();
+        return stock;
+    }
+
+    public BigDecimal getPrice(){
+        return getStockWithMinSoldPrice().getSoldPrice();
+    }
+
+    private StockEntity getStockWithMinSoldPrice(){
+        return this.stocks.stream()
                 .filter(s -> s.getStatus().equals(StockStatus.AVAILABLE))
                 .min(Comparator.comparing(StockEntity::getSoldPrice))
                 .orElseThrow();
-        stock.decAmount();
-        return stock;
     }
 
     @Override
