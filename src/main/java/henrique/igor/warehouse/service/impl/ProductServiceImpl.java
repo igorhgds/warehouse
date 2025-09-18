@@ -39,7 +39,7 @@ public class ProductServiceImpl implements IProductService {
         var stock = entity.decStock();
         repository.save(entity);
         if (stock.isUnavailable()){
-            stockService.changeStatus(entity.getId(), stock.getStatus());
+            stockService.changeStatus(stock.getId(), stock.getStatus());
         }
     }
 

@@ -7,6 +7,7 @@ import henrique.igor.warehouse.repository.StockRepository;
 import henrique.igor.warehouse.service.IProductChangeAvailabilityProducer;
 import henrique.igor.warehouse.service.IProductQueryService;
 import henrique.igor.warehouse.service.IStockService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +39,8 @@ public class StockServiceImpl implements IStockService {
 
     @Override
     public void changeStatus(UUID id, StockStatus status) {
-        var entity = repository.findById(id).orElseThrow();
+        var entity = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Estoque não encontrado com o ID: " + id));
         entity.setStatus(status);
         repository.save(entity);
         producer.notifyStatusChange(new StockStatusMessage(entity.getProduct().getId(), status));
